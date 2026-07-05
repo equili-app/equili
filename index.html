@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equilì – Nutrizione online, ovunque tu sia</title>
+  <meta name="description" content="Equilì ti mette in contatto con nutrizionisti professionisti tramite videocall, al prezzo che ti puoi permettere." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --eq-green: #2A7D5F;
+      --eq-green-light: #E6F4EE;
+      --eq-green-mid: #4BAE86;
+      --eq-dark: #1A2E25;
+      --eq-text: #2C3E35;
+      --eq-muted: #6B8278;
+      --eq-border: #C8DFD5;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; color: var(--eq-text); background: #fff; line-height: 1.6; }
+
+    /* NAV */
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 2rem; border-bottom: 1px solid var(--eq-border);
+      position: sticky; top: 0; background: #fff; z-index: 100;
+    }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--eq-green); letter-spacing: -0.02em; text-decoration: none; }
+    .nav-cta {
+      background: var(--eq-green); color: #fff; border: none;
+      padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.875rem;
+      font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #1f6049; }
+
+    /* HERO */
+    .hero { padding: 4.5rem 2rem 3rem; text-align: center; max-width: 680px; margin: 0 auto; }
+    .hero-eyebrow {
+      display: inline-block; background: var(--eq-green-light); color: var(--eq-green);
+      font-size: 0.78rem; font-weight: 600; padding: 0.3rem 1rem; border-radius: 50px;
+      margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 3rem);
+      line-height: 1.15; color: var(--eq-dark); margin-bottom: 1.2rem; letter-spacing: -0.02em;
+    }
+    .hero h1 em { font-style: italic; color: var(--eq-green); }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--eq-muted); max-width: 440px;
+      margin: 0 auto 2rem; font-weight: 300;
+    }
+
+    .email-form { display: flex; gap: 0.5rem; max-width: 420px; margin: 0 auto 0.8rem; flex-wrap: wrap; justify-content: center; }
+    .email-form input {
+      flex: 1; min-width: 200px; padding: 0.75rem 1.1rem;
+      border: 1.5px solid var(--eq-border); border-radius: 50px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; color: var(--eq-text);
+      transition: border-color 0.2s;
+    }
+    .email-form input:focus { border-color: var(--eq-green); }
+    .email-form button {
+      background: var(--eq-green); color: #fff; border: none;
+      padding: 0.75rem 1.4rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .email-form button:hover { background: #1f6049; }
+    .hero-note { font-size: 0.78rem; color: var(--eq-muted); }
+    .success-msg {
+      display: none; background: var(--eq-green-light); color: var(--eq-green);
+      border-radius: 50px; padding: 0.65rem 1.4rem; font-size: 0.88rem; font-weight: 500;
+      text-align: center; margin-top: 0.8rem; max-width: 320px; margin-left: auto; margin-right: auto;
+    }
+
+    /* SOCIAL PROOF */
+    .social-proof {
+      display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap;
+      padding: 1.8rem 2rem; border-top: 1px solid var(--eq-border);
+      border-bottom: 1px solid var(--eq-border); margin-top: 1rem;
+    }
+    .stat { text-align: center; }
+    .stat-n { font-family: 'DM Serif Display', serif; font-size: 1.7rem; color: var(--eq-green); }
+    .stat-l { font-size: 0.78rem; color: var(--eq-muted); margin-top: 0.1rem; }
+
+    /* COME FUNZIONA */
+    .how { padding: 3.5rem 2rem; max-width: 680px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--eq-green); margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 3vw, 2rem);
+      color: var(--eq-dark); margin-bottom: 2rem; line-height: 1.2;
+    }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; }
+    .step { background: var(--eq-green-light); border-radius: 16px; padding: 1.4rem 1.2rem; }
+    .step-num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--eq-green); opacity: 0.45; line-height: 1; }
+    .step-title { font-weight: 600; font-size: 0.95rem; color: var(--eq-dark); margin: 0.5rem 0 0.3rem; }
+    .step-desc { font-size: 0.82rem; color: var(--eq-muted); line-height: 1.5; }
+
+    /* PER CHI */
+    .for-whom { padding: 3rem 2rem; background: var(--eq-green-light); }
+    .for-whom-inner { max-width: 680px; margin: 0 auto; }
+    .pills { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
+    .pill {
+      background: #fff; border: 1.5px solid var(--eq-border); border-radius: 50px;
+      padding: 0.45rem 1rem; font-size: 0.85rem; color: var(--eq-text);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--eq-green-mid); flex-shrink: 0; }
+
+    /* PREZZI */
+    .pricing { padding: 3.5rem 2rem; max-width: 680px; margin: 0 auto; }
+    .price-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .price-card { border: 1.5px solid var(--eq-border); border-radius: 16px; padding: 1.4rem 1.2rem; }
+    .price-card.featured { border-color: var(--eq-green); background: var(--eq-green-light); }
+    .price-badge {
+      font-size: 0.68rem; background: var(--eq-green); color: #fff;
+      padding: 0.2rem 0.65rem; border-radius: 50px; display: inline-block; margin-bottom: 0.6rem;
+      font-weight: 500;
+    }
+    .price-name { font-weight: 600; font-size: 0.92rem; color: var(--eq-dark); }
+    .price-amount { font-family: 'DM Serif Display', serif; font-size: 2.1rem; color: var(--eq-green); margin: 0.4rem 0 0.15rem; line-height: 1; }
+    .price-period { font-size: 0.75rem; color: var(--eq-muted); }
+    .price-desc { font-size: 0.8rem; color: var(--eq-muted); margin-top: 0.6rem; line-height: 1.5; }
+
+    /* CTA FINALE */
+    .cta-bottom { padding: 3.5rem 2rem; text-align: center; border-top: 1px solid var(--eq-border); }
+    .cta-bottom h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 3vw, 2rem); color: var(--eq-dark); margin-bottom: 0.8rem; }
+    .cta-bottom p { color: var(--eq-muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+
+    /* FOOTER */
+    footer {
+      padding: 1.3rem 2rem; border-top: 1px solid var(--eq-border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+    .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--eq-green); }
+    .footer-note { font-size: 0.75rem; color: var(--eq-muted); }
+
+    @media (max-width: 480px) {
+      nav { padding: 1rem 1.2rem; }
+      .hero { padding: 3rem 1.2rem 2rem; }
+      .social-proof { gap: 1.5rem; }
+      .how, .pricing, .cta-bottom { padding: 2.5rem 1.2rem; }
+      .for-whom { padding: 2.5rem 1.2rem; }
+      footer { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="#">Equilì</a>
+    <button class="nav-cta" onclick="document.getElementById('email-hero').focus()">Entra in lista</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-eyebrow">Nutrizione online · In arrivo</span>
+    <h1>Il nutrizionista giusto<br>per <em>te</em>, ovunque tu sia</h1>
+    <p class="hero-sub">Equilì ti mette in contatto con nutrizionisti professionisti tramite videocall, al prezzo che ti puoi permettere.</p>
+    <div class="email-form">
+      <input type="email" id="email-hero" placeholder="la-tua@email.it" />
+      <button onclick="iscriviti('email-hero','success-hero','form-hero')">Voglio essere avvisato</button>
+    </div>
+    <p class="hero-note">Nessuno spam. Solo un avviso quando apriamo.</p>
+    <div class="success-msg" id="success-hero">Perfetto! Ti avvisiamo al lancio 🌿</div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <div class="social-proof">
+    <div class="stat"><div class="stat-n">25€</div><div class="stat-l">Prima consulenza</div></div>
+    <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Online</div></div>
+    <div class="stat"><div class="stat-n">Iscritti</div><div class="stat-l">All'albo professionale</div></div>
+  </div>
+
+  <!-- COME FUNZIONA -->
+  <section class="how">
+    <div class="section-label">Come funziona</div>
+    <div class="section-title">Tre passi verso<br>il tuo benessere</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Raccontaci di te</div>
+        <div class="step-desc">Compila un breve questionario sui tuoi obiettivi e abitudini alimentari.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Trova il tuo match</div>
+        <div class="step-desc">Il nostro sistema ti suggerisce i nutrizionisti più adatti a te e alle tue esigenze.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Inizia il percorso</div>
+        <div class="step-desc">Prenota la tua sessione e collegati in videocall quando vuoi, dal divano di casa.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PER CHI -->
+  <section class="for-whom">
+    <div class="for-whom-inner">
+      <div class="section-label">Per chi è Equilì</div>
+      <div class="section-title">Nutrizione per tutti,<br>non solo per chi è in città</div>
+      <div class="pills">
+        <div class="pill"><div class="pill-dot"></div>Chi vuole dimagrire</div>
+        <div class="pill"><div class="pill-dot"></div>Sportivi e appassionati fitness</div>
+        <div class="pill"><div class="pill-dot"></div>Chi soffre di intolleranze</div>
+        <div class="pill"><div class="pill-dot"></div>Diabete e patologie metaboliche</div>
+        <div class="pill"><div class="pill-dot"></div>Alimentazione vegana e vegetariana</div>
+        <div class="pill"><div class="pill-dot"></div>Gravidanza e allattamento</div>
+        <div class="pill"><div class="pill-dot"></div>Chi non ha tempo per l'ambulatorio</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREZZI -->
+  <section class="pricing">
+    <div class="section-label">Prezzi chiari</div>
+    <div class="section-title">Niente sorprese,<br>niente abbonamenti obbligatori</div>
+    <div class="price-cards">
+      <div class="price-card">
+        <div class="price-name">Prima consulenza</div>
+        <div class="price-amount">25€</div>
+        <div class="price-period">sessione singola</div>
+        <div class="price-desc">Per conoscerti e capire di cosa hai bisogno.</div>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Più scelto</div>
+        <div class="price-name">Pacchetto 3 sessioni</div>
+        <div class="price-amount">90€</div>
+        <div class="price-period">30€ a sessione</div>
+        <div class="price-desc">Il modo migliore per iniziare un percorso serio.</div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Sessione singola</div>
+        <div class="price-amount">35€</div>
+        <div class="price-period">quando vuoi</div>
+        <div class="price-desc">Flessibilità totale, senza impegno.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINALE -->
+  <section class="cta-bottom">
+    <h2>Vuoi sapere quando apriamo?</h2>
+    <p>Lascia la tua email, ti scriviamo noi al lancio.</p>
+    <div class="email-form" id="form-bottom">
+      <input type="email" id="email-bottom" placeholder="la-tua@email.it" />
+      <button onclick="iscriviti('email-bottom','success-bottom','form-bottom')">Avvisami</button>
+    </div>
+    <div class="success-msg" id="success-bottom">Sei in lista! Ti scriviamo presto 🌿</div>
+  </section>
+
+  <footer>
+    <span class="footer-logo">Equilì</span>
+    <span class="footer-note">© 2025 Equilì · Nutrizione online · Made in Italy 🇮🇹</span>
+  </footer>
+
+  <script>
+    function iscriviti(inputId, successId, formId) {
+      var val = document.getElementById(inputId).value.trim();
+      if (!val || !val.includes('@') || !val.includes('.')) {
+        document.getElementById(inputId).style.borderColor = '#e05252';
+        document.getElementById(inputId).focus();
+        return;
+      }
+      if (formId) {
+        var form = document.getElementById(formId);
+        if (form) form.style.display = 'none';
+      } else {
+        document.getElementById(inputId).parentElement.style.display = 'none';
+      }
+      var msg = document.getElementById(successId);
+      msg.style.display = 'block';
+      // Qui in futuro collegherai Supabase o Mailchimp per salvare l'email
+      console.log('Email raccolta:', val);
+    }
+  </script>
+
+</body>
+</html>
