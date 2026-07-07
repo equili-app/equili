@@ -191,7 +191,7 @@
   <script>
     const SUPABASE_URL = 'https://pcrgnriwslwittffcjqh.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_MusUBRkYJKw4QDM1ktEf6A_XH43PGKE';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function iscriviti(inputId, btnId, formId, successId, errorId) {
       const email = document.getElementById(inputId).value.trim();
@@ -204,25 +204,19 @@
       btn.disabled = true;
       btn.textContent = 'Salvataggio...';
 
-      const { data, error } = await supabase
-        .from('waitlist')
-        .insert([{ email }])
-        .select();
-
-      console.log('DATA:', data);
-      console.log('ERROR:', error);
+      const { error } = await supabaseClient.from('waitlist').insert([{ email: email }]);
 
       if (error) {
         btn.disabled = false;
         btn.textContent = 'Riprova';
         document.getElementById(errorId).style.display = 'block';
-
-        alert(JSON.stringify(error, null, 2));
-        console.error('ERRORE COMPLETO:', error);
+        console.error('Errore Supabase:', error.message);
       } else {
-        console.log('Inserimento riuscito:', data);
         document.getElementById(formId).style.display = 'none';
         document.getElementById(successId).style.display = 'block';
       }
     }
   </script>
+
+</body>
+</html>
