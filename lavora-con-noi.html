@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lavora con noi – Equilì</title>
+  <meta name="description" content="Unisciti alla rete di nutrizionisti di Equilì e raggiungi nuovi pazienti online." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --eq-green: #2A7D5F;
+      --eq-green-light: #E6F4EE;
+      --eq-green-mid: #4BAE86;
+      --eq-dark: #1A2E25;
+      --eq-text: #2C3E35;
+      --eq-muted: #6B8278;
+      --eq-border: #C8DFD5;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; color: var(--eq-text); background: #fff; line-height: 1.6; }
+
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 2rem; border-bottom: 1px solid var(--eq-border);
+      position: sticky; top: 0; background: #fff; z-index: 100;
+    }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--eq-green); text-decoration: none; }
+    .nav-back { font-size: 0.875rem; color: var(--eq-muted); text-decoration: none; display: flex; align-items: center; gap: 0.4rem; }
+    .nav-back:hover { color: var(--eq-green); }
+
+    .hero {
+      background: var(--eq-green-light);
+      padding: 3.5rem 2rem;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block; background: var(--eq-green); color: #fff;
+      font-size: 0.78rem; font-weight: 600; padding: 0.3rem 1rem;
+      border-radius: 50px; margin-bottom: 1.2rem; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 2.8rem);
+      color: var(--eq-dark); margin-bottom: 1rem; line-height: 1.15;
+    }
+    .hero h1 em { font-style: italic; color: var(--eq-green); }
+    .hero-sub { font-size: 1rem; color: var(--eq-muted); max-width: 480px; margin: 0 auto; font-weight: 300; }
+
+    .benefits {
+      display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
+      padding: 2rem; border-bottom: 1px solid var(--eq-border);
+    }
+    .benefit {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.85rem; color: var(--eq-text);
+    }
+    .benefit-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--eq-green); flex-shrink: 0; }
+
+    .form-section { max-width: 620px; margin: 0 auto; padding: 3rem 2rem; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--eq-green); margin-bottom: 0.4rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif; font-size: 1.8rem;
+      color: var(--eq-dark); margin-bottom: 2rem; line-height: 1.2;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label { font-size: 0.85rem; font-weight: 500; color: var(--eq-dark); }
+    label span { color: var(--eq-green); }
+
+    input, select, textarea {
+      padding: 0.75rem 1rem; border: 1.5px solid var(--eq-border);
+      border-radius: 12px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; color: var(--eq-text); outline: none;
+      transition: border-color 0.2s; background: #fff; width: 100%;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--eq-green); }
+    input.error, select.error, textarea.error { border-color: #e05252; }
+    textarea { resize: vertical; min-height: 100px; }
+    select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B8278' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+
+    .checkbox-group { display: flex; flex-direction: column; gap: 0.6rem; }
+    .checkbox-item { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; }
+    .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; border: 1.5px solid var(--eq-border); border-radius: 4px; accent-color: var(--eq-green); cursor: pointer; flex-shrink: 0; }
+    .checkbox-item span { font-size: 0.88rem; color: var(--eq-text); }
+
+    .disponibilita-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6rem; }
+    .disp-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 0.8rem; border: 1.5px solid var(--eq-border);
+      border-radius: 50px; cursor: pointer; transition: all 0.2s; font-size: 0.82rem;
+    }
+    .disp-item input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--eq-green); cursor: pointer; }
+    .disp-item:has(input:checked) { border-color: var(--eq-green); background: var(--eq-green-light); color: var(--eq-green); font-weight: 500; }
+
+    .privacy-box {
+      background: var(--eq-green-light); border-radius: 12px;
+      padding: 1rem 1.2rem; font-size: 0.82rem; color: var(--eq-muted);
+      display: flex; gap: 0.8rem; align-items: flex-start;
+    }
+    .privacy-box input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--eq-green); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+
+    .submit-btn {
+      width: 100%; padding: 1rem; background: var(--eq-green); color: #fff;
+      border: none; border-radius: 50px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .submit-btn:hover { background: #1f6049; }
+    .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+    .success-box {
+      display: none; text-align: center; padding: 3rem 2rem;
+    }
+    .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .success-box h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--eq-dark); margin-bottom: 0.8rem; }
+    .success-box p { color: var(--eq-muted); font-size: 0.95rem; }
+
+    .error-msg {
+      display: none; background: #fdecea; color: #c0392b;
+      border-radius: 12px; padding: 0.8rem 1.2rem; font-size: 0.85rem; margin-top: 1rem;
+    }
+
+    footer {
+      padding: 1.3rem 2rem; border-top: 1px solid var(--eq-border);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--eq-green); }
+    .footer-note { font-size: 0.75rem; color: var(--eq-muted); }
+
+    @media (max-width: 540px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      nav { padding: 1rem 1.2rem; }
+      .hero { padding: 2.5rem 1.2rem; }
+      .form-section { padding: 2rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="index.html">Equilì</a>
+    <a class="nav-back" href="index.html">← Torna alla home</a>
+  </nav>
+
+  <section class="hero">
+    <span class="hero-eyebrow">Per i professionisti</span>
+    <h1>Porta la tua professione<br><em>online</em> con Equilì</h1>
+    <p class="hero-sub">Unisciti alla rete di biologi nutrizionisti di Equilì. Raggiungi nuovi pazienti, gestisci il tuo tempo e lavora da dove vuoi.</p>
+  </section>
+
+  <div class="benefits">
+    <div class="benefit"><div class="benefit-dot"></div>Pazienti già motivati</div>
+    <div class="benefit"><div class="benefit-dot"></div>Nessun costo fisso iniziale</div>
+    <div class="benefit"><div class="benefit-dot"></div>Gestisci i tuoi orari</div>
+    <div class="benefit"><div class="benefit-dot"></div>Pagamenti sicuri e automatici</div>
+    <div class="benefit"><div class="benefit-dot"></div>Supporto dedicato</div>
+  </div>
+
+  <section class="form-section">
+    <div class="section-label">Candidatura</div>
+    <div class="section-title">Raccontaci di te</div>
+
+    <div id="form-container">
+      <div class="form-grid">
+
+        <!-- Nome -->
+        <div class="form-group">
+          <label for="nome">Nome <span>*</span></label>
+          <input type="text" id="nome" placeholder="Mario" />
+        </div>
+
+        <!-- Cognome -->
+        <div class="form-group">
+          <label for="cognome">Cognome <span>*</span></label>
+          <input type="text" id="cognome" placeholder="Rossi" />
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email professionale <span>*</span></label>
+          <input type="email" id="email" placeholder="mario.rossi@email.it" />
+        </div>
+
+        <!-- Telefono -->
+        <div class="form-group">
+          <label for="telefono">Telefono</label>
+          <input type="tel" id="telefono" placeholder="+39 333 1234567" />
+        </div>
+
+        <!-- Numero ONB -->
+        <div class="form-group">
+          <label for="onb">Numero iscrizione ONB <span>*</span></label>
+          <input type="text" id="onb" placeholder="es. 045678" />
+        </div>
+
+        <!-- Sezione ONB -->
+        <div class="form-group">
+          <label for="sezione">Sezione ONB <span>*</span></label>
+          <select id="sezione">
+            <option value="">Seleziona...</option>
+            <option value="A">Sezione A</option>
+            <option value="B">Sezione B</option>
+          </select>
+        </div>
+
+        <!-- Specializzazioni -->
+        <div class="form-group full">
+          <label>Specializzazioni <span>*</span></label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" value="dimagrimento" /> <span>Dimagrimento e controllo del peso</span></label>
+            <label class="checkbox-item"><input type="checkbox" value="sport" /> <span>Nutrizione sportiva</span></label>
+            <label class="checkbox-item"><input type="checkbox" value="patologie" /> <span>Patologie metaboliche (diabete, colesterolo…)</span></label>
+            <label class="checkbox-item"><input type="checkbox" value="vegan" /> <span>Alimentazione vegana e vegetariana</span></label>
+            <label class="checkbox-item"><input type="checkbox" value="gravidanza" /> <span>Gravidanza e allattamento</span></label>
+            <label class="checkbox-item"><input type="checkbox" value="intolleranze" /> <span>Intolleranze e allergie alimentari</span></label>
+            <label class="checkbox-item"><input type="checkbox" value="dca" /> <span>Disturbi del comportamento alimentare (DCA)</span></label>
+            <label class="checkbox-item"><input type="checkbox" value="anziani" /> <span>Nutrizione nell'anziano</span></label>
+          </div>
+        </div>
+
+        <!-- Disponibilità -->
+        <div class="form-group full">
+          <label>Disponibilità oraria <span>*</span></label>
+          <div class="disponibilita-grid">
+            <label class="disp-item"><input type="checkbox" value="mattina" /> Mattina</label>
+            <label class="disp-item"><input type="checkbox" value="pomeriggio" /> Pomeriggio</label>
+            <label class="disp-item"><input type="checkbox" value="sera" /> Sera</label>
+            <label class="disp-item"><input type="checkbox" value="sabato" /> Sabato</label>
+            <label class="disp-item"><input type="checkbox" value="domenica" /> Domenica</label>
+          </div>
+        </div>
+
+        <!-- Prezzo -->
+        <div class="form-group">
+          <label for="prezzo">Tariffa per sessione (€) <span>*</span></label>
+          <input type="number" id="prezzo" placeholder="es. 40" min="20" max="100" />
+        </div>
+
+        <!-- Anni esperienza -->
+        <div class="form-group">
+          <label for="esperienza">Anni di esperienza</label>
+          <select id="esperienza">
+            <option value="">Seleziona...</option>
+            <option value="0-2">Meno di 2 anni</option>
+            <option value="2-5">2–5 anni</option>
+            <option value="5-10">5–10 anni</option>
+            <option value="10+">Più di 10 anni</option>
+          </select>
+        </div>
+
+        <!-- Presentazione -->
+        <div class="form-group full">
+          <label for="bio">Presentazione <span>*</span></label>
+          <textarea id="bio" placeholder="Raccontaci il tuo approccio, la tua esperienza e perché vuoi unirti a Equilì…"></textarea>
+        </div>
+
+        <!-- Privacy -->
+        <div class="form-group full">
+          <div class="privacy-box">
+            <input type="checkbox" id="privacy" />
+            <span>Acconsento al trattamento dei miei dati personali ai sensi del GDPR (Reg. UE 2016/679) per la valutazione della mia candidatura. I dati non saranno ceduti a terzi.</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="error-msg" id="error-msg">Compila tutti i campi obbligatori e accetta la privacy policy.</div>
+      <button class="submit-btn" id="submit-btn" onclick="inviaCandidatura()">Invia candidatura</button>
+    </div>
+
+    <!-- Messaggio successo -->
+    <div class="success-box" id="success-box">
+      <div class="success-icon">🌿</div>
+      <h2>Candidatura inviata!</h2>
+      <p>Grazie per il tuo interesse. Valuteremo la tua candidatura e ti contatteremo entro 5 giorni lavorativi alla email che hai indicato.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-logo">Equilì</span>
+    <span class="footer-note">© 2025 Equilì · Nutrizione online · Made in Italy 🇮🇹</span>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://pcrgnriwslwittffcjqh.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_MusUBRkYJKw4QDM1ktEf6A_XH43PGKE';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function inviaCandidatura() {
+      const nome = document.getElementById('nome').value.trim();
+      const cognome = document.getElementById('cognome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const onb = document.getElementById('onb').value.trim();
+      const sezione = document.getElementById('sezione').value;
+      const prezzo = document.getElementById('prezzo').value.trim();
+      const bio = document.getElementById('bio').value.trim();
+      const privacy = document.getElementById('privacy').checked;
+
+      const specializzazioni = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(el => el.value);
+      const disponibilita = Array.from(document.querySelectorAll('.disponibilita-grid input:checked')).map(el => el.value);
+
+      // Validazione
+      if (!nome || !cognome || !email || !onb || !sezione || !prezzo || !bio || !privacy || specializzazioni.length === 0 || disponibilita.length === 0) {
+        document.getElementById('error-msg').style.display = 'block';
+        window.scrollTo({ top: document.getElementById('error-msg').offsetTop - 100, behavior: 'smooth' });
+        return;
+      }
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Invio in corso...';
+      document.getElementById('error-msg').style.display = 'none';
+
+      const { error } = await supabaseClient.from('nutrizionisti_candidature').insert([{
+        nome,
+        cognome,
+        email,
+        telefono: document.getElementById('telefono').value.trim(),
+        numero_onb: onb,
+        sezione_onb: sezione,
+        specializzazioni: specializzazioni.join(', '),
+        disponibilita: disponibilita.join(', '),
+        tariffa: parseInt(prezzo),
+        anni_esperienza: document.getElementById('esperienza').value,
+        bio,
+      }]);
+
+      if (error) {
+        btn.disabled = false;
+        btn.textContent = 'Invia candidatura';
+        document.getElementById('error-msg').textContent = 'Errore durante l\'invio. Riprova tra qualche istante.';
+        document.getElementById('error-msg').style.display = 'block';
+        console.error('Errore:', error.message);
+      } else {
+        document.getElementById('form-container').style.display = 'none';
+        document.getElementById('success-box').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  </script>
+
+</body>
+</html>
